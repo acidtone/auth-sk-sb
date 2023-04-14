@@ -1,18 +1,24 @@
+<!-- src/routes/+layout.svelte -->
 <script lang="ts">
-	import { invalidateAll } from '$app/navigation';
-	import { supabaseClient } from '$lib/supabase';
-	import { onMount } from 'svelte';
-	onMount(() => {
-		const {
-			data: { subscription }
-		} = supabaseClient.auth.onAuthStateChange(() => {
-			console.log('Auth state change detected');
-			invalidateAll();
-		});
-		return () => {
-			subscription.unsubscribe();
-		};
-	});
+  import { invalidate } from '$app/navigation';
+  import { onMount } from 'svelte';
+  import type { LayoutData } from './$types';
+
+  export let data: LayoutData;
+
+  $: ({ supabase, session } = data);
+
+  onMount(() => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, _session) => {
+      if (_session?.expires_at !== session?.expires_at) {
+        invalidate('supabase:auth')
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  });
 </script>
 
 <slot />
