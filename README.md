@@ -19,7 +19,7 @@ Go through the tutorials above and copy paste the relevant code into a fresh SK 
 
 ## Session notes
 - Cloned the [final code](https://github.com/huntabyte/sk-supabase-auth/tree/final-code) from the first tutorial
-- Followed tutorial:
+- Followed tutorial [SvelteKit Authentication with Supabase](https://www.youtube.com/watch?v=lSm0GNnh-0I):
     1. Set up new Supabase project
         - Setup `.env` with project URL and anon key
     2. Install libraries
@@ -44,4 +44,12 @@ Go through the tutorials above and copy paste the relevant code into a fresh SK 
     9. Booted server to see if there were errors
         - Uh oh, looks like there were [changes between 0.8 and 0.9](https://supabase.com/docs/guides/auth/auth-helpers/sveltekit#migration) in `auth-helpers-sveltekit`
         - There seems to be substantial difference between the Supabase documentation and how Huntabyte wrote his code. Specifically, SB uses `+layout.js` instead of `+layout.server.js`. I'm going to go with Supabase code and try to refactor Huntabyte's as I go through the rest of the tutorial. That's _IF_ I can get the app to run in the first place.
-
+        - Got it working! Ended up following the setup instructions in the [`auth-helpers-sveltekit` docs](https://supabase.com/docs/guides/auth/auth-helpers/sveltekit)
+        - Is there a reason to follow the Huntabyte tutorial? Yes (for now) since I would really like to get the email/password functionality working. The Supabase examples use magic links.
+    10. Ignoring the tutorial and just refactoring the routes for register, login and logout:
+        - `/` - copy and pasted this code but commented out the following until I figure out where to get `.auth.signOut()`:
+            - Line 3
+            - Lines 9-12 
+        - `/register`, `/login` and `/logout` - everything basically just worked once I changed the locals variable from `sb` to `supabase`.
+        - Got the `use:enhance` code working. The supabase client is now passed to the page from the `+layout.js` `load` function: `data.supabase.auth.signOut()`
+- Next step: Set up a protected route using hooks...

@@ -6,6 +6,9 @@
 
   export let data: LayoutData;
 
+  console.log(data.session);
+  
+
   $: ({ supabase, session } = data);
 
   onMount(() => {
